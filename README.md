@@ -1,8 +1,15 @@
-# React + Vite
+# Music Practice Site
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Designing a simple site for personal guitar practice needs. Plans include:
+- Metronome with:
+  - Adjustable BPM and time signatures
+  - Ramping BPM
+  - Measure and beat skipping
+  - Accent and sound customization
+  - Single note or chord drone
+- Saving:
+  - Songs with name/bpm/time signature
+  - Exercises (metronome settings w/ ramping/skipping)
+ 
+Developing with React and Node.js.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
