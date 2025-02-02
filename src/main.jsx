@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import Metronome from './Metronome.jsx'
+import './styles/index.css'
+import Metronome from './components/Metronome.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
