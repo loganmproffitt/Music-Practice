@@ -10,6 +10,19 @@ function Metronome() {
   // Load the sound file using Tone.Player
   const synth = useRef(new Tone.Player().toDestination());
 
+  const playBeat = (time) => {
+    synth.current.seek(0, time);
+    synth.current.start(time);
+  };
+
+  const scheduleMetronome = () => {
+    Tone.getTransport().cancel();
+    Tone.getTransport().scheduleRepeat((time) => {
+      playBeat(time);
+    }, "4n");
+  };
+
+
   // Load audio
   useEffect(() => {
     synth.current.load("./src/assets/sounds/woodblock.wav").then(() => {
@@ -23,15 +36,10 @@ function Metronome() {
 
     if (isPlaying) {
       Tone.start().then(() => {
-        transport.cancel();
+        // Start scheduler
+        scheduleMetronome()
 
-        transport.scheduleRepeat((time) => {
-          if (synth.current.loaded) {
-            synth.current.seek(0, time); // Reset the playback position
-            synth.current.start(time);
-          }
-        }, "4n");
-
+        // If not started, start audio
         if (transport.state !== "started") {
           transport.start();
         }
