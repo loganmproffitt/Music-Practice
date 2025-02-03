@@ -6,34 +6,49 @@
 */
 
 import * as Tone from "tone";
-import { shouldPlayBeat } from "./measureControls";
+import { shouldPlayBeat, getCycleLength, getBeatsOn } from "./measureControls";
 import { useRef } from "react";
 
 export function scheduleMetronome(playBeat, metronomeSettingsRef, measureSettingsRef) {
-    console.log("scheduleMetronome called with measureSettings = ", measureSettingsRef.current);
+    // Get transport, cancel current schedule
     const transport = Tone.getTransport();
     transport.cancel();
+    let localMeasureSettings = measureSettingsRef.current;
 
     let beatCount = 0;
+    let cycleLength = getCycleLength(localMeasureSettings);
 
+    // Start scheduling
     transport.scheduleRepeat((time) => {
 
         // Check whether metronome has been turned off, exit gracefully
         if (!metronomeSettingsRef.current.isPlaying) {
+            // Schedule empty beat, then stop transport
+            transport.scheduleOnce(() => {}, time);
             stopTransport();
             return;
         }
 
-        // Check bpm
+        // Update bpm
         transport.bpm.value = metronomeSettingsRef.current.bpm;
 
+        // If skipping disabled, update settings and cycle length immediately. Otherwise, update in first half
+        if (!localMeasureSettings.skipping.skippingEnabled || beatCount < getBeatsOn(localMeasureSettings)) {
+            localMeasureSettings = measureSettingsRef.current;
+            cycleLength = getCycleLength(localMeasureSettings);
+        }
+
         // Check whether the current beat is skipped
-        if (shouldPlayBeat(beatCount, measureSettingsRef.current)) {
+        if (shouldPlayBeat(beatCount, localMeasureSettings)) {
             playBeat(time);
         } else {
+            console.log("Skipping");
             transport.scheduleOnce(() => {}, time); // If skipping, schedule empty beat
         }
-        beatCount = beatCount + 1;
+
+        // Update beat count and apply setting changes if needed
+        beatCount = (beatCount + 1) % cycleLength;
+
     }, "4n");
 }
 
