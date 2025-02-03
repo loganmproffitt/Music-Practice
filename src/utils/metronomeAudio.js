@@ -12,7 +12,7 @@ const synth = new Tone.Player().toDestination();
 
 export function loadSounds() {
     synth.load(woodblock).then(() => {
-      console.log("Sound loaded!");
+      console.log("Sound loaded.");
     }).catch((err) => console.error("Error loading sound:", err));
   }
   

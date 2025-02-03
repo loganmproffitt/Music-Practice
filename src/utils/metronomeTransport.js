@@ -7,35 +7,47 @@
 
 import * as Tone from "tone";
 import { shouldPlayBeat } from "./measureControls";
+import { useRef } from "react";
 
-export function scheduleMetronome(playBeat, measureSettings) {
+export function scheduleMetronome(playBeat, metronomeSettingsRef, measureSettingsRef) {
+    console.log("scheduleMetronome called with measureSettings = ", measureSettingsRef.current);
     const transport = Tone.getTransport();
     transport.cancel();
 
     let beatCount = 0;
 
     transport.scheduleRepeat((time) => {
+
+        // Check whether metronome has been turned off, exit gracefully
+        if (!metronomeSettingsRef.current.isPlaying) {
+            stopTransport();
+            return;
+        }
+
+        // Check bpm
+        transport.bpm.value = metronomeSettingsRef.current.bpm;
+
         // Check whether the current beat is skipped
-        if (shouldPlayBeat(beatCount, measureSettings)) {
+        if (shouldPlayBeat(beatCount, measureSettingsRef.current)) {
             playBeat(time);
+        } else {
+            transport.scheduleOnce(() => {}, time); // If skipping, schedule empty beat
         }
         beatCount = beatCount + 1;
     }, "4n");
 }
 
-export function startTransport(playBeat, bpm, measureSettings) {
+export function startTransport(playBeat, metronomeSettingsRef, measureSettingsRef) {
+    console.log("Starting transport.");
     const transport = Tone.getTransport();
 
-    transport.bpm.value = bpm;
+    //transport.bpm.value = metronomeSettingsRef.current.bpm;
     transport.start();
-
-    setTimeout(() => {
-        transport.start();
-        scheduleMetronome(playBeat, measureSettings);
-    }, 50);
+    scheduleMetronome(playBeat, metronomeSettingsRef, measureSettingsRef);
 }
 
 export function stopTransport() {
+    console.log("Stopping transport.");
     const transport = Tone.getTransport();
     Tone.getTransport().stop();
     Tone.getTransport().cancel()

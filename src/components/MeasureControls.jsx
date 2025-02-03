@@ -1,6 +1,9 @@
 import "../styles/App.css";
+import { useMetronome } from "../context/MetronomeContext";
 
-function MeasureControls({ settings, setSettings }) {
+function MeasureControls() {
+
+  const { measureSettings, setMeasureSettings } = useMetronome();
 
     return (
       <div>
@@ -10,9 +13,9 @@ function MeasureControls({ settings, setSettings }) {
         <label>Time Signature:</label>
         {/* Numerator Selection */}
         <select
-          value={settings.numerator}
+          value={measureSettings.numerator}
           onChange={(e) =>
-          setSettings((prev) => ({
+          setMeasureSettings((prev) => ({
             ...prev,
             numerator: Number(e.target.value),
           }))
@@ -25,9 +28,9 @@ function MeasureControls({ settings, setSettings }) {
 
         {/* Denominator Selection */}
         <select
-          value={settings.denominator}
+          value={measureSettings.denominator}
           onChange={(e) =>
-          setSettings((prev) => ({
+          setMeasureSettings((prev) => ({
             ...prev,
             denominator: Number(e.target.value),
           }))
@@ -41,8 +44,8 @@ function MeasureControls({ settings, setSettings }) {
           <label>
             <input
               type="checkbox"
-              checked={settings.skipping.skippingEnabled}
-              onChange={() => setSettings((prev) => ({
+              checked={measureSettings.skipping.skippingEnabled}
+              onChange={() => setMeasureSettings((prev) => ({
                 ...prev,
                 skipping: {
                   ...prev.skipping,
