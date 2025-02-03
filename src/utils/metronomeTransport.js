@@ -6,16 +6,24 @@
 */
 
 import * as Tone from "tone";
+import { shouldPlayBeat } from "./measureControls";
 
-export function scheduleMetronome(playBeat) {
+export function scheduleMetronome(playBeat, measureSettings) {
     const transport = Tone.getTransport();
     transport.cancel();
+
+    let beatCount = 0;
+
     transport.scheduleRepeat((time) => {
-        playBeat(time);
+        // Check whether the current beat is skipped
+        if (shouldPlayBeat(beatCount, measureSettings)) {
+            playBeat(time);
+        }
+        beatCount = beatCount + 1;
     }, "4n");
 }
 
-export function startTransport(playBeat, bpm) {
+export function startTransport(playBeat, bpm, measureSettings) {
     const transport = Tone.getTransport();
 
     transport.bpm.value = bpm;
@@ -23,7 +31,7 @@ export function startTransport(playBeat, bpm) {
 
     setTimeout(() => {
         transport.start();
-        scheduleMetronome(playBeat);
+        scheduleMetronome(playBeat, measureSettings);
     }, 50);
 }
 

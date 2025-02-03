@@ -22,6 +22,7 @@ function MetronomeControls({ bpm, storedBPM, setStoredBPM, isPlaying, togglePlay
         <button onClick={togglePlaying}>
           {isPlaying ? "Stop" : "Start"}
         </button>
+
       </div>
     );
   }
