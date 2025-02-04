@@ -13,3 +13,4 @@ Designing a simple site for personal guitar practice needs. Plans include:
  
 Developing with React and Node.js.
 
+![Music App](https://github.com/user-attachments/assets/6fd6d934-2db2-4684-aa9c-2bcfca38706d)
