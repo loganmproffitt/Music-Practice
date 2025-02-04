@@ -11,6 +11,6 @@ Simple website for personal guitar practice. Plans include:
   - Saving of songs with name/bpm/time signature
   - Grouping of songs into setlists
  
-Developing with React and Node.js.
+Developing with React.js.
 
 ![Music App](https://github.com/user-attachments/assets/6fd6d934-2db2-4684-aa9c-2bcfca38706d)
