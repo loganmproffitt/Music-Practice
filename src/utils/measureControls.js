@@ -26,12 +26,24 @@ export function getCycleLength(measureSettings) {
     }
 }
 
-export function getBeatsPerMeasure(numerator) {
-    if (numerator % 3 === 0 && numerator >= 6) {
-        return numerator / 3; 
-    }
+export function getBeatsPerMeasure(numerator, denominator) {
+    // Compound time signatures
+    /*
+    if (denominator === 8 && numerator % 3 === 0 && numerator >= 6) {
+        return numerator / 3;
+    }*/
+
+    // Simple signatures - return numerator
     return numerator;
 }
+
+export function getSubdivisionValue(denominator) {
+    if (denominator === 4) return "4n";  // Quarter-note subdivision
+    if (denominator === 8) return "8n";  // Eighth-note subdivision
+    if (denominator === 16) return "16n"; // Sixteenth-note subdivision
+    return "4n"; // Default to quarter notes
+}
+
 
 export function shouldPlayBeat(beatCount, measureSettings) {
     // Check whether skipping is enabled
