@@ -13,4 +13,5 @@ Simple website for personal guitar practice. Plans include:
  
 Developing with React.js.
 
-![Music App](https://github.com/user-attachments/assets/6fd6d934-2db2-4684-aa9c-2bcfca38706d)
+![music-screenshot](https://github.com/user-attachments/assets/cacd606f-5b62-42cb-bc1b-5c148f9456b6)
+
