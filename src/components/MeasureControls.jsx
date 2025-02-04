@@ -7,7 +7,6 @@ function MeasureControls() {
 
   return (
     <div className="measure-controls"> 
-      <h2>Settings</h2>
 
       {/* Time Signature settings */}
       <div className="select-container">
