@@ -1,15 +1,15 @@
 # Music Practice Site
 
-Designing a simple site for personal guitar practice needs. Plans include:
+Simple website for personal guitar practice. Plans include:
 - Metronome with:
   - Adjustable BPM and time signatures
-  - Ramping BPM
   - Measure and beat skipping
+  - Beat visualization
   - Accent and sound customization
   - Single note or chord drone
-- Saving:
-  - Songs with name/bpm/time signature
-  - Exercises (metronome settings w/ ramping/skipping)
+- Songs
+  - Saving of songs with name/bpm/time signature
+  - Grouping of songs into setlists
  
 Developing with React and Node.js.
 
