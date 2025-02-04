@@ -1,0 +1,52 @@
+/* Main container */
+.metronome-controls {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+/* BPM Display */
+.metronome-controls h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #5dc1b9; /* Softer cyan for a modern look */
+}
+
+/* BPM Slider */
+.bpm-slider {
+    width: 100%;
+    margin-bottom: 25px; /* Increased space below slider */
+}
+
+/* Play / Stop Button */
+.play-button {
+    background-color: #3d3d3d;  /* Muted deep blue */
+    color: white;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    margin-top: 10px; /* Adds extra spacing from the slider */
+}
+
+/* Subtle hover effect */
+.play-button:hover {
+    background-color: #3d3d3d;  /* Slightly lighter blue */
+    transform: scale(1.05);
+}
+
+/* When metronome is playing, button changes to a muted dark red */
+.play-button.playing {
+    background-color: #703d3d;  /* Muted, elegant dark red */
+}
+
+.play-button.playing:hover {
+    background-color: #854848;  /* Slightly brighter shade on hover */
+}

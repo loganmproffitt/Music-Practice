@@ -1,0 +1,113 @@
+/* Main card container */
+.measure-controls {
+    background-color: #1e1e1e; /* Dark theme */
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    max-width: 400px;
+    margin: 10px auto; /* Reduce space above */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Even vertical spacing */
+}
+
+/* Title (Measure Settings) */
+.measure-controls h2 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 10px; /* Reduce extra space */
+}
+
+/* Label styling */
+.label {
+    font-weight: bold;
+    color: #d3d3d3;
+}
+
+/* Style select dropdowns */
+.select {
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Group selects for better alignment */
+.select-group {
+    display: flex;
+    gap: 10px;
+}
+
+/* Ensure select fields are evenly spaced */
+.select-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Reduce spacing between label & dropdown */
+}
+
+/* Align checkbox switch correctly */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Toggle Switch Styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+/* Hide default checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Slider background */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #616161;
+    transition: 0.4s;
+    border-radius: 20px;
+}
+
+/* Rounded slider */
+.slider.round {
+    border-radius: 34px;
+}
+
+/* Change background when checked */
+.switch input:checked + .slider {
+    background-color: #007bff;
+}
+
+/* Move slider handle when checked */
+.switch input:checked + .slider:before {
+    transform: translateX(18px);
+}
+
+/* Toggle switch handle */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}

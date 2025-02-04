@@ -1,4 +1,5 @@
 import "../styles/App.css";
+import "../styles/MetronomeControls.css";
 import { useMetronome } from "../context/MetronomeContext";
 import { useMetronomeScheduler } from "../hooks/useMetronomeScheduler";
 
@@ -8,7 +9,7 @@ function MetronomeControls() {
   const { metronomeSettings, setMetronomeSettings, togglePlaying } = useMetronome();
 
     return (
-      <div>
+      <div className="metronome-controls">
         <h2>{metronomeSettings.bpm} BPM</h2>
   
         {/* BPM Slider */}
@@ -25,7 +26,7 @@ function MetronomeControls() {
         />
   
         {/* Play / Stop Button */}
-        <button onClick={togglePlaying}>
+        <button className={`play-button ${metronomeSettings.isPlaying ? "playing" : ""}`} onClick={togglePlaying}>
           {metronomeSettings.isPlaying ? "Stop" : "Start"}
         </button>
 
