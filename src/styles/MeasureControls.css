@@ -13,13 +13,6 @@
     gap: 15px; /* Even vertical spacing */
 }
 
-/* Title (Measure Settings) */
-.measure-controls h2 {
-    font-size: 1.8rem;
-    text-align: center;
-    margin-bottom: 10px; /* Reduce extra space */
-}
-
 /* Label styling */
 .label {
     font-weight: bold;
@@ -31,8 +24,32 @@
     width: 100%;
     padding: 8px;
     font-size: 1rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    border-radius: 5px; /* Soft rounded corners */
+    border: 1px solid #888; /* Softer border */
+    background-color: #2a2a2a; /* Darker background */
+    color: white;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+/* Hover effect */
+.select:hover {
+    background-color: #3c3c3c;
+}
+
+/* Focus (when clicking the dropdown) */
+.select:focus {
+    border-color: #5dc1b9;
+    box-shadow: 0px 0px 5px rgba(93, 193, 185, 0.7);
+}
+
+/* Ensure select fields are evenly spaced */
+.select-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Reduce spacing between label & dropdown */
+    margin-bottom: 10px;
 }
 
 /* Group selects for better alignment */
@@ -41,12 +58,7 @@
     gap: 10px;
 }
 
-/* Ensure select fields are evenly spaced */
-.select-container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px; /* Reduce spacing between label & dropdown */
-}
+/* Slider Styling */
 
 /* Align checkbox switch correctly */
 .checkbox-container {
@@ -91,7 +103,7 @@
 
 /* Change background when checked */
 .switch input:checked + .slider {
-    background-color: #007bff;
+    background-color: #3e9cff;
 }
 
 /* Move slider handle when checked */
