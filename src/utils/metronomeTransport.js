@@ -6,7 +6,7 @@
 */
 
 import * as Tone from "tone";
-import { shouldPlayBeat, getCycleLength, getBeatsOn, getSubdivisionValue, getBeatsPerMeasure } from "./measureControls";
+import { shouldPlayBeat, getCycleLength, getSubdivisionValue, shouldUpdateSettings } from "./measureControls";
 import { useRef } from "react";
 
 export function scheduleMetronome(playBeat, metronomeSettingsRef, measureSettingsRef) {
@@ -66,37 +66,4 @@ export function stopTransport() {
     const transport = Tone.getTransport();
     Tone.getTransport().stop();
     Tone.getTransport().cancel()
-}
-
-export function shouldUpdateSettings(beatCount, localMeasureSettings, measureSettingsRef) {
-    console.log("beatCount:", beatCount + 1);
-    // If on first beat, update
-    if (beatCount == 0) return true;
-
-    // SKIPPING ON
-    if (localMeasureSettings.skipping.skippingEnabled) {
-        // If in beatsOff, wait
-        if (beatCount >= getBeatsOn(localMeasureSettings)) return false;
-
-        // beatsOn = true
-        // WAIT if numerator < current
-        if (measureSettingsRef.current.numerator < localMeasureSettings.numerator) return false;
-
-        // Check if new measuresOn is less than current
-        if (measureSettingsRef.current.skipping.measuresOn < localMeasureSettings.skipping.measuresOn) {
-            // If beatCount is still in beatsOn, UPDATE
-            return beatCount < getBeatsOn(measureSettingsRef.current);
-        }
-        // Otherwise, wait
-        return true;
-    }
-    // SKIPPING OFF
-    else {
-        // WAIT if new numerator is less
-        if (measureSettingsRef.current.numerator < localMeasureSettings.numerator) return false;
-        // WAIT if skipping enabled and time signature change
-        if (measureSettingsRef.current.skipping.skippingEnabled == true 
-            && measureSettingsRef.current.numerator != localMeasureSettings.numerator) return false;
-        else return true;
-    }
 }

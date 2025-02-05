@@ -55,3 +55,77 @@ export function shouldPlayBeat(beatCount, measureSettings) {
     let relativeBeat = beatCount % cycleLength;
     return relativeBeat < (measureSettings.skipping.measuresOn * getBeatsPerMeasure(measureSettings.numerator));
 }
+
+
+/* Settings updating */
+
+export function shouldUpdateSettings(beatCount, localMeasureSettings, measureSettingsRef) {
+    console.log("beatCount:", beatCount + 1);
+    // Check for settings changes, skip if none
+    if (JSON.stringify(prevSettings) === JSON.stringify(newSettings)) return;
+
+    let flags = new Set();
+
+    /*
+        List of flags:
+            FIRST_BEAT
+
+            SKIPPING_ON
+            SKIPPING_OFF
+            SKIPPING_CHANGED
+            SKIPPING_ENABLED
+            SKIPPING_DISABLED
+
+            IN_ON_MEASURES
+            IN_OFF_MEASURES
+            START_OF_MEASURE
+
+            MEASURES_ON_GEQ
+            MEASURES_ON_DECREASED
+
+            NUMERATOR_GEQ
+            NUMERATOR_DECREASED
+    */
+
+    // Current skipping setting
+    if (localMeasureSettings.skipping.skippingEnabled) 
+        flags.add("SKIPPING_ON");
+    else 
+        flags.add("SKIPPING_OFF");
+
+    // Changes to skipping
+    if (localMeasureSettings.skipping.skippingEnabled != measureSettingsRef.current.skipping.skippingEnabled) {
+        // Skipping updated
+        flags.add("SKIPPING_UPDATED");
+        // Get update
+        if (measureSettingsRef.curent.skipping.skippingEnabled) 
+            flags.add("SKIPPING_ENABLED");
+        else 
+            flags.add("SKIPPING_DISABLED");
+    }
+
+    // Beat location
+    if (beatCount < getCycleLength(localMeasureSettings)) 
+        flags.add("IN_ON_MEASURES");
+    else 
+        flags.add("IN_OFF_MEASURES");
+    if (beatCount == 0) 
+        flags.add("FIRST_BEAT");
+    if (beatCount % getBeatsPerMeasure(localMeasureSettings.numerator, measureSettingsRef.current.numerator) == 0) 
+        flags.add("START_OF_MEASURE");
+
+    // Measure skipping changes
+    if (localMeasureSettings.skipping.measuresOn <= measureSettingsRef.current.skipping.measuresOn)
+        flags.add("MEASURES_ON_GEQ");
+    else
+        flags.add("MEASURES_ON_DECREASED");
+
+    // Time signature changes
+    if (localMeasureSettings.numerator <= measureSettingsRef.current.numerator)
+        flags.add("NUMERATOR_GEQ");
+    else
+        flags.add("NUMERATOR_DECREASED");
+
+    // Dispatch flags
+    dispatch({ type: "UPDATE_FLAGS", payload: { flags: Array.from(flags) } });
+}
