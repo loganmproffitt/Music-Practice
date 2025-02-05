@@ -1,3 +1,4 @@
+import { evaluateMeasureChanges } from "./measureChangesEvaluator.js";
 
 export const measureSettings = {
     // Time signature
@@ -62,7 +63,7 @@ export function shouldPlayBeat(beatCount, measureSettings) {
 export function shouldUpdateSettings(beatCount, localMeasureSettings, measureSettingsRef) {
     console.log("beatCount:", beatCount + 1);
     // Check for settings changes, skip if none
-    if (JSON.stringify(prevSettings) === JSON.stringify(newSettings)) return;
+    if (JSON.stringify(localMeasureSettings) === JSON.stringify(measureSettingsRef.current)) return;
 
     let flags = new Set();
 
@@ -80,32 +81,34 @@ export function shouldUpdateSettings(beatCount, localMeasureSettings, measureSet
             IN_OFF_MEASURES
             START_OF_MEASURE
 
-            MEASURES_ON_GEQ
+            MEASURES_ON_INCREASED
             MEASURES_ON_DECREASED
 
-            NUMERATOR_GEQ
+            NUMERATOR_INCREASED
             NUMERATOR_DECREASED
     */
 
     // Current skipping setting
-    if (localMeasureSettings.skipping.skippingEnabled) 
-        flags.add("SKIPPING_ON");
-    else 
-        flags.add("SKIPPING_OFF");
+    if (localMeasureSettings.skipping.skippingEnabled == measureSettingsRef.current.skipping.skippingEnabled) {
+        if (localMeasureSettings.skipping.skippingEnabled) 
+            flags.add("SKIPPING_ON");
+        else 
+            flags.add("SKIPPING_OFF");
+    }
 
     // Changes to skipping
     if (localMeasureSettings.skipping.skippingEnabled != measureSettingsRef.current.skipping.skippingEnabled) {
         // Skipping updated
         flags.add("SKIPPING_UPDATED");
         // Get update
-        if (measureSettingsRef.curent.skipping.skippingEnabled) 
+        if (measureSettingsRef.current.skipping.skippingEnabled) 
             flags.add("SKIPPING_ENABLED");
         else 
             flags.add("SKIPPING_DISABLED");
     }
 
     // Beat location
-    if (beatCount < getCycleLength(localMeasureSettings)) 
+    if (beatCount < getBeatsOn(localMeasureSettings)) 
         flags.add("IN_ON_MEASURES");
     else 
         flags.add("IN_OFF_MEASURES");
@@ -115,17 +118,17 @@ export function shouldUpdateSettings(beatCount, localMeasureSettings, measureSet
         flags.add("START_OF_MEASURE");
 
     // Measure skipping changes
-    if (localMeasureSettings.skipping.measuresOn <= measureSettingsRef.current.skipping.measuresOn)
-        flags.add("MEASURES_ON_GEQ");
-    else
+    if (localMeasureSettings.skipping.measuresOn < measureSettingsRef.current.skipping.measuresOn)
+        flags.add("MEASURES_ON_INCREASED");
+    else if (localMeasureSettings.skipping.measuresOn > measureSettingsRef.current.skipping.measuresOn)
         flags.add("MEASURES_ON_DECREASED");
 
     // Time signature changes
-    if (localMeasureSettings.numerator <= measureSettingsRef.current.numerator)
-        flags.add("NUMERATOR_GEQ");
-    else
+    if (localMeasureSettings.numerator < measureSettingsRef.current.numerator)
+        flags.add("NUMERATOR_INCREASED");
+    else if (localMeasureSettings.numerator > measureSettingsRef.current.numerator)
         flags.add("NUMERATOR_DECREASED");
 
     // Dispatch flags
-    dispatch({ type: "UPDATE_FLAGS", payload: { flags: Array.from(flags) } });
+    return evaluateMeasureChanges(flags);
 }
