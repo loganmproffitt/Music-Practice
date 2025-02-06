@@ -6,8 +6,7 @@
 */
 
 import * as Tone from "tone";
-import { shouldPlayBeat, getCycleLength, getSubdivisionValue, shouldUpdateSettings } from "./measureControls";
-import { useRef } from "react";
+import { shouldPlayBeat, getCycleLength, getSubdivisionValue, shouldUpdateSettings, getBeatsPerMeasure } from "./measureControls";
 
 export function scheduleMetronome(playBeat, metronomeSettingsRef, measureSettingsRef) {
     // Get transport, cancel current schedule
@@ -15,7 +14,8 @@ export function scheduleMetronome(playBeat, metronomeSettingsRef, measureSetting
     transport.cancel();
     let localMeasureSettings = measureSettingsRef.current;
 
-    let beatCount = 0;
+    let measureBeat = 0;
+    let cycleBeat = 0;
     let cycleLength = getCycleLength(localMeasureSettings);
 
     // Start scheduling
@@ -34,16 +34,17 @@ export function scheduleMetronome(playBeat, metronomeSettingsRef, measureSetting
 
 
         // Check whether to update settings
-        if (shouldUpdateSettings(beatCount, localMeasureSettings, measureSettingsRef)) {
+        if (shouldUpdateSettings(cycleBeat, localMeasureSettings, measureSettingsRef)) {
             localMeasureSettings = measureSettingsRef.current;
             cycleLength = getCycleLength(localMeasureSettings);
         }
 
-        // Update beat count
-        beatCount = (beatCount + 1) % cycleLength;
+        // Update beat counts
+        measureBeat = (measureBeat + 1) % getBeatsPerMeasure(localMeasureSettings.numerator, localMeasureSettings.denominator);
+        cycleBeat = (cycleBeat + 1) % cycleLength;
 
         // Check whether the current beat is skipped
-        if (shouldPlayBeat(beatCount, localMeasureSettings, measureSettingsRef)) {
+        if (shouldPlayBeat(cycleBeat, localMeasureSettings, measureSettingsRef)) {
             playBeat(time);
         } else {
             transport.scheduleOnce(() => {}, time); // If skipping, schedule empty beat
@@ -56,9 +57,7 @@ export function startTransport(playBeat, metronomeSettingsRef, measureSettingsRe
     console.log("Starting transport.");
     const transport = Tone.getTransport();
 
-    //transport.bpm.value = metronomeSettingsRef.current.bpm;
     transport.start();
-    scheduleMetronome(playBeat, metronomeSettingsRef, measureSettingsRef);
 }
 
 export function stopTransport() {

@@ -7,6 +7,9 @@ const MetronomeContext = createContext();
 
 export function MetronomeProvider({ children }) {
 
+    const [currentBeat, setCurrentBeat] = useState(0);
+    const [beatsPerMeasure, setBeatsPerMeasure] = useState(4);
+
     const [metronomeSettings, setMetronomeSettings] = useState({
         bpm: 120,
         isPlaying: false,
@@ -55,6 +58,8 @@ export function MetronomeProvider({ children }) {
 
     return (
         <MetronomeContext.Provider value={{ 
+            currentBeat, setCurrentBeat,
+            beatsPerMeasure, setBeatsPerMeasure,
             metronomeSettings, metronomeSettingsRef, setMetronomeSettings,
             togglePlaying, 
             measureSettings, measureSettingsRef, setMeasureSettings 

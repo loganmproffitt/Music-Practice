@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useMetronome } from "../context/MetronomeContext"; 
-import { startTransport, stopTransport } from "../utils/metronomeTransport";
+import { startTransport, scheduleMetronome } from "../utils/metronomeTransport";
 import { playBeat } from "../utils/metronomeAudio";
 
 export function useMetronomeScheduler() {
@@ -12,6 +12,7 @@ export function useMetronomeScheduler() {
       // Turn on the metronome
       console.log("useMetronomeScheduler starting metronome.");
       startTransport(playBeat, metronomeSettingsRef, measureSettingsRef);
+      scheduleMetronome(playBeat, metronomeSettingsRef, measureSettingsRef)
     }
   }, [metronomeSettings.isPlaying]);
 }
