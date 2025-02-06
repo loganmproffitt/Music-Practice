@@ -39,15 +39,15 @@ export function scheduleMetronome(playBeat, metronomeSettingsRef, measureSetting
             cycleLength = getCycleLength(localMeasureSettings);
         }
 
+        // Update beat count
+        beatCount = (beatCount + 1) % cycleLength;
+
         // Check whether the current beat is skipped
         if (shouldPlayBeat(beatCount, localMeasureSettings, measureSettingsRef)) {
             playBeat(time);
         } else {
             transport.scheduleOnce(() => {}, time); // If skipping, schedule empty beat
         }
-
-        // Update beat count and apply setting changes if needed
-        beatCount = (beatCount + 1) % cycleLength;
 
     }, getSubdivisionValue(measureSettingsRef.current.denominator));
 }

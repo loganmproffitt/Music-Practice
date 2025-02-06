@@ -1,4 +1,4 @@
-import { evaluateMeasureChanges } from "./measureChangesEvaluator.js";
+import { evaluateFlags } from "./measureChangesEvaluator.js";
 
 export const measureSettings = {
     // Time signature
@@ -112,8 +112,10 @@ export function shouldUpdateSettings(beatCount, localMeasureSettings, measureSet
         flags.add("IN_ON_MEASURES");
     else 
         flags.add("IN_OFF_MEASURES");
+
     if (beatCount == 0) 
         flags.add("FIRST_BEAT");
+
     if (beatCount % getBeatsPerMeasure(localMeasureSettings.numerator, measureSettingsRef.current.numerator) == 0) 
         flags.add("START_OF_MEASURE");
 
@@ -123,6 +125,11 @@ export function shouldUpdateSettings(beatCount, localMeasureSettings, measureSet
     else if (localMeasureSettings.skipping.measuresOn > measureSettingsRef.current.skipping.measuresOn)
         flags.add("MEASURES_ON_DECREASED");
 
+    if (localMeasureSettings.skipping.measuresOff < measureSettingsRef.current.skipping.measuresOff)
+        flags.add("MEASURES_OFF_INCREASED");
+    else if (localMeasureSettings.skipping.measuresOff > measureSettingsRef.current.skipping.measuresOff)
+        flags.add("MEASURES_OFF_DECREASED");
+
     // Time signature changes
     if (localMeasureSettings.numerator < measureSettingsRef.current.numerator)
         flags.add("NUMERATOR_INCREASED");
@@ -130,5 +137,5 @@ export function shouldUpdateSettings(beatCount, localMeasureSettings, measureSet
         flags.add("NUMERATOR_DECREASED");
 
     // Dispatch flags
-    return evaluateMeasureChanges(flags);
+    return evaluateFlags(flags);
 }
