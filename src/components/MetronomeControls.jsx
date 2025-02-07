@@ -3,6 +3,7 @@ import "../styles/MetronomeControls.css";
 import { useMetronome } from "../context/MetronomeContext";
 import { useMetronomeScheduler } from "../hooks/useMetronomeScheduler";
 import { Play, Pause } from "lucide-react";
+import Visualization from "./Visualization.jsx";
 
 function MetronomeControls() {
   useMetronomeScheduler();
@@ -27,6 +28,8 @@ function MetronomeControls() {
               bpm: Number(e.target.value),
             }))}
           />
+
+          <Visualization/>
         </div>
   
         {/* Play / Pause Button */}

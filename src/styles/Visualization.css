@@ -1,0 +1,42 @@
+:root {
+    --beat_color: rgb(50, 50, 50);
+    --flash_color: rgb(136, 136, 136);
+    --disabled_color: rgb(105, 105, 105);
+}
+
+.visualization {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.beat {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--beat_color);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+}
+
+@keyframes flash {
+    0% { background-color: var(--active-blue); } /* Hardcoded value */
+    100% { background-color: rgb(50, 50, 50); }  /* Hardcoded value */
+}
+
+/* Highlight the active beat */
+.beat.active {
+    animation: flash 0.2s ease-out;
+}
+
+/* Style for muted beats */
+.beat.muted {
+    background-color: red;
+    opacity: 0.5;
+}

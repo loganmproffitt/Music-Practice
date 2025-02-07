@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect, useRef } from "react";
-//import { updateMetronomeSettings } from "../utils/metronomeTransport";
 import { loadSounds } from "../utils/metronomeAudio";
 import * as Tone from "tone";
 
@@ -7,7 +6,7 @@ const MetronomeContext = createContext();
 
 export function MetronomeProvider({ children }) {
 
-    const [currentBeat, setCurrentBeat] = useState(0);
+    const [currentBeat, setCurrentBeat] = useState(-1);
     const [beatsPerMeasure, setBeatsPerMeasure] = useState(4);
 
     const [metronomeSettings, setMetronomeSettings] = useState({
