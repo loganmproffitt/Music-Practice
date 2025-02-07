@@ -43,7 +43,7 @@
 
 /* Circular Play/Pause Button */
 .play-button {
-    background-color: #2a2a2a;
+    background-color: #191919;
     color: white;
     font-size: 1.2rem;
     width: var(--button-size);

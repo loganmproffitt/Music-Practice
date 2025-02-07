@@ -26,7 +26,7 @@
     font-size: 1rem;
     border-radius: 5px; /* Soft rounded corners */
     border: 1px solid #888; /* Softer border */
-    background-color: #2a2a2a; /* Darker background */
+    background-color: #181818; /* Darker background */
     color: white;
     outline: none;
     transition: all 0.2s ease-in-out;
@@ -40,8 +40,8 @@
 
 /* Focus (when clicking the dropdown) */
 .select:focus {
-    border-color: #5dc1b9;
-    box-shadow: 0px 0px 5px rgba(93, 193, 185, 0.7);
+    border-color: var(--active-blue);
+    box-shadow: 0px 0px 5px var(--active-blue);
 }
 
 /* Ensure select fields are evenly spaced */
@@ -103,7 +103,7 @@
 
 /* Change background when checked */
 .switch input:checked + .slider {
-    background-color: #3e9cff;
+    background-color: var(--active-blue);
 }
 
 /* Move slider handle when checked */

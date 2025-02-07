@@ -24,8 +24,8 @@
     transition: background-color 0.2s ease-in-out;
 
     outline-style: solid;
-    outline-color: black;
-    outline-width: 3px;
+    outline-color: rgb(8, 8, 8);
+    outline-width: 2px;
 }
 
 @keyframes flash {
