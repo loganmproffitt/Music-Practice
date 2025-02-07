@@ -3,8 +3,12 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
 
+:root {
   --active-blue: #5dc1b9;
+  --background-color: rgb(65, 65, 65);
+  --card-color: rgb(39, 39, 39);
 }
 
 .card {
@@ -12,7 +16,7 @@
 }
 
 body {
-  background-color: rgb(39, 39, 39);
+  background-color: var(--background-color);
 }
 
 h1 {

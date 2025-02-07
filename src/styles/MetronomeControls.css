@@ -4,7 +4,7 @@
 
 /* Main container */
 .metronome-controls {
-    background-color: #1e1e1e;
+    background-color: var(--card-color);
     color: #ffffff;
     padding: 20px;
     border-radius: 10px;

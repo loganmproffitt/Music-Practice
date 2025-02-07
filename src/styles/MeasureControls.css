@@ -1,6 +1,6 @@
 /* Main card container */
 .measure-controls {
-    background-color: #1e1e1e; /* Dark theme */
+    background-color: var(--card-color); /* Dark theme */
     color: #ffffff;
     padding: 20px;
     border-radius: 10px;
