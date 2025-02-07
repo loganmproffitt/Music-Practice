@@ -28,35 +28,31 @@ export function scheduleMetronome(playBeat, metronomeSettingsRef, measureSetting
         if (!metronomeSettingsRef.current.isPlaying) {
             // Schedule empty beat, then stop transport
             transport.scheduleOnce(() => {}, time);
-
             stopTransport();
             return;
         }
 
-        // Update beat for UI
-        setCurrentBeat(measureBeat);
-
         // Update bpm
         transport.bpm.value = metronomeSettingsRef.current.bpm;
 
-
-        // Check whether the current beat is skipped
-        if (shouldPlayBeat(cycleBeat, localMeasureSettings, measureSettingsRef)) {
+        // Check whether to play the current beat
+        if (shouldPlayBeat(measureBeat, cycleBeat, localMeasureSettings, measureSettingsRef)) {
+            // Update beat for UI
+            setCurrentBeat(measureBeat);
             playBeat(time);
         } else {
             transport.scheduleOnce(() => {}, time); // If skipping, schedule empty beat
         }
 
-        // Check whether to update settings
+        // Manage measure settings
         if (shouldUpdateSettings(cycleBeat, localMeasureSettings, measureSettingsRef)) {
             localMeasureSettings = measureSettingsRef.current;
             cycleLength = getCycleLength(localMeasureSettings);
-
             // TODO: Get flags from flagEvaluator to determine whether to update
             setBeatsPerMeasure(getBeatsPerMeasure(localMeasureSettings.numerator, localMeasureSettings.denominator));
         }
 
-        // Update current beat
+        // Update beat counts
         measureBeat = (measureBeat + 1) % getBeatsPerMeasure(localMeasureSettings.numerator, localMeasureSettings.denominator);
         cycleBeat = (cycleBeat + 1) % cycleLength;
 

@@ -1,17 +1,5 @@
 import { evaluateFlags } from "./measureChangesEvaluator.js";
 
-export const measureSettings = {
-    // Time signature
-    numerator: 4,
-    denominator: 4,
-    // Skipping settings
-    skipping: {
-        skippingEnabled: false,
-        measuresOn: 1,
-        measuresOff: 1
-    }
-};
-
 export function getBeatsOn(measureSettings) {
     return getBeatsPerMeasure(measureSettings.numerator) * measureSettings.skipping.measuresOn;
 }
@@ -28,13 +16,6 @@ export function getCycleLength(measureSettings) {
 }
 
 export function getBeatsPerMeasure(numerator, denominator) {
-    // Compound time signatures
-    /*
-    if (denominator === 8 && numerator % 3 === 0 && numerator >= 6) {
-        return numerator / 3;
-    }*/
-
-    // Simple signatures - return numerator
     return numerator;
 }
 
@@ -46,15 +27,18 @@ export function getSubdivisionValue(denominator) {
 }
 
 
-export function shouldPlayBeat(beatCount, measureSettings) {
+export function shouldPlayBeat(measureBeat, cycleBeat, measureSettings) {
     // Check whether skipping is enabled
     if (!measureSettings.skipping.skippingEnabled) {
         return true;
     }
 
-    let cycleLength = getCycleLength(measureSettings);
-    let relativeBeat = beatCount % cycleLength;
-    return relativeBeat < (measureSettings.skipping.measuresOn * getBeatsPerMeasure(measureSettings.numerator));
+    // Check mask
+    if (measureSettings.mask[measureBeat] == 0 || cycleBeat < (measureSettings.skipping.measuresOn * getBeatsPerMeasure(measureSettings.numerator))) {
+        // Check if in on measure
+        return false;
+    }
+    else return true;
 }
 
 
@@ -86,6 +70,8 @@ export function shouldUpdateSettings(beatCount, localMeasureSettings, measureSet
 
             NUMERATOR_INCREASED
             NUMERATOR_DECREASED
+
+            MASK_UPDATED
     */
 
     // Current skipping setting
@@ -135,6 +121,10 @@ export function shouldUpdateSettings(beatCount, localMeasureSettings, measureSet
         flags.add("NUMERATOR_INCREASED");
     else if (localMeasureSettings.numerator > measureSettingsRef.current.numerator)
         flags.add("NUMERATOR_DECREASED");
+
+    // Mask changes - always update
+    if (localMeasureSettings.mask != measureSettingsRef.current.mask)
+        flags.add("MASK_UPDATED");
 
     // Dispatch flags
     return evaluateFlags(flags);

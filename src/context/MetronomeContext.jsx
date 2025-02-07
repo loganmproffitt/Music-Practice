@@ -6,6 +6,8 @@ const MetronomeContext = createContext();
 
 export function MetronomeProvider({ children }) {
 
+    const maxMeasureSize = 12;
+
     const [currentBeat, setCurrentBeat] = useState(-1);
     const [beatsPerMeasure, setBeatsPerMeasure] = useState(4);
 
@@ -17,12 +19,24 @@ export function MetronomeProvider({ children }) {
     const [measureSettings, setMeasureSettings] = useState({
         numerator: 4,
         denominator: 4,
+        mask: Array.from({length: maxMeasureSize}, () => 1),
         skipping: {
             skippingEnabled: false,
             measuresOn: 1,
             measuresOff: 1
         }
     });
+
+    const toggleMaskIndex = (index) => {
+        if (index >= maxMeasureSize) return;
+        setMeasureSettings((prevSettings) => ({
+            ...prevSettings,
+            mask: prevSettings.mask.map((value, i) =>
+                i === index ? (value === 1 ? 0 : 1) : value
+            ),
+        }));
+    }
+
 
     // Get references
     const metronomeSettingsRef = useRef(metronomeSettings);
@@ -51,7 +65,6 @@ export function MetronomeProvider({ children }) {
                 ...prev,
                 isPlaying: !prev.isPlaying
             }));
-            console.log("togglePlaying triggered.");
         });
     };
 
@@ -61,7 +74,8 @@ export function MetronomeProvider({ children }) {
             beatsPerMeasure, setBeatsPerMeasure,
             metronomeSettings, metronomeSettingsRef, setMetronomeSettings,
             togglePlaying, 
-            measureSettings, measureSettingsRef, setMeasureSettings 
+            measureSettings, measureSettingsRef, setMeasureSettings,
+            toggleMaskIndex
         }}>
             {children}
         </MetronomeContext.Provider>

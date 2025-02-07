@@ -10,7 +10,6 @@ export function useMetronomeScheduler() {
   useEffect(() => {
     if (metronomeSettings.isPlaying) {
       // Turn on the metronome
-      console.log("useMetronomeScheduler starting metronome.");
       startTransport(playBeat, metronomeSettingsRef, measureSettingsRef);
       scheduleMetronome(playBeat, metronomeSettingsRef, measureSettingsRef, setCurrentBeat, setBeatsPerMeasure)
     }

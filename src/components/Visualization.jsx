@@ -3,7 +3,7 @@ import "../styles/Visualization.css";
 import { useMetronome } from "../context/MetronomeContext";
 
 function Visualization() {
-    const { currentBeat, beatsPerMeasure } = useMetronome();
+    const { currentBeat, beatsPerMeasure, toggleMaskIndex } = useMetronome();
 
     return (
         <div className="visualization">
@@ -11,6 +11,7 @@ function Visualization() {
                 <div
                     key={index}
                     className={`beat ${index === currentBeat ? "active" : ""}`}
+                    onClick={() => toggleMaskIndex(index)}
                 >
                     {index + 1}
                 </div>

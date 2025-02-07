@@ -86,6 +86,10 @@ export function evaluateFlags(flags) {
     else if (flags.has("NUMERATOR_DECREASED"))
         return false;
 
+    // MASK CHANGES - ALWAYS UPDATE
+    if (flags.has("MASK_UPDATED"))
+        return true;
+
 
     return shouldUpdate;
 }
