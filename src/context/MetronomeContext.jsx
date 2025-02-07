@@ -27,6 +27,13 @@ export function MetronomeProvider({ children }) {
         }
     });
 
+    // TODO: Add beats per measure to measure settings
+    useEffect(() => {
+        if (!metronomeSettings.isPlaying) {
+            setBeatsPerMeasure(measureSettings.numerator);
+        }
+    }, [measureSettings]);
+
     const toggleMaskIndex = (index) => {
         if (index >= maxMeasureSize) return;
         setMeasureSettings((prevSettings) => ({
