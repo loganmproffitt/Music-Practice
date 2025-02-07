@@ -29,23 +29,19 @@ export function getSubdivisionValue(denominator) {
 
 export function shouldPlayBeat(measureBeat, cycleBeat, measureSettings) {
     // Check whether skipping is enabled
-    if (!measureSettings.skipping.skippingEnabled) {
-        return true;
+    if (measureSettings.skipping.skippingEnabled) {
+        // In off measures?
+        if (cycleBeat >= (measureSettings.skipping.measuresOn * getBeatsPerMeasure(measureSettings.numerator)))
+            return false;     
     }
 
-    // Check mask
-    if (measureSettings.mask[measureBeat] == 0 || cycleBeat < (measureSettings.skipping.measuresOn * getBeatsPerMeasure(measureSettings.numerator))) {
-        // Check if in on measure
-        return false;
-    }
-    else return true;
+    return measureSettings.mask[measureBeat];
 }
 
 
 /* Settings updating */
 
 export function shouldUpdateSettings(beatCount, localMeasureSettings, measureSettingsRef) {
-    console.log("beatCount:", beatCount + 1);
     // Check for settings changes, skip if none
     if (JSON.stringify(localMeasureSettings) === JSON.stringify(measureSettingsRef.current)) return;
 

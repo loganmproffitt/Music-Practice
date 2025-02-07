@@ -90,6 +90,5 @@ export function evaluateFlags(flags) {
     if (flags.has("MASK_UPDATED"))
         return true;
 
-
     return shouldUpdate;
 }
