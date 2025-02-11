@@ -7,6 +7,7 @@ Website for personal guitar practice. Implemented features:
   - Visualization
   - Beat skipping
   - Measure skipping
+    
 Additional planned features include:
 - Accent and sound customization
 - Drones
@@ -18,5 +19,6 @@ Stack:
 - Frontend: React.js, Vite, Tone.js
 - Backend: Node.js, Express.js, bcrypt, PostgreSQL
 
-![music-screenshot](https://github.com/user-attachments/assets/cacd606f-5b62-42cb-bc1b-5c148f9456b6)
+![Metronome_App](https://github.com/user-attachments/assets/e1d194a3-6d02-4e40-b190-7e2c3490be09)
+
 
