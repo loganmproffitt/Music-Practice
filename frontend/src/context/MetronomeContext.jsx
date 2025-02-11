@@ -27,6 +27,7 @@ export function MetronomeProvider({ children }) {
         }
     });
 
+    // Updates time signature changes when metronome is off
     // TODO: Add beats per measure to measure settings
     useEffect(() => {
         if (!metronomeSettings.isPlaying) {
@@ -34,6 +35,7 @@ export function MetronomeProvider({ children }) {
         }
     }, [measureSettings]);
 
+    // Toggle mask value at index
     const toggleMaskIndex = (index) => {
         if (index >= maxMeasureSize) return;
         setMeasureSettings((prevSettings) => ({
@@ -43,7 +45,6 @@ export function MetronomeProvider({ children }) {
             ),
         }));
     }
-
 
     // Get references
     const metronomeSettingsRef = useRef(metronomeSettings);
