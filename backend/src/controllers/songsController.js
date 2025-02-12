@@ -49,6 +49,33 @@ async function createSong(req, res) {
     }
 }
 
+async function getAllSongs(req, res) {
+    try {
+        // Get userId
+        const userId = req.userId;
+
+        // Get songs
+        const result = await pool.query(
+            `SELECT s.*, 
+                    COALESCE(ms.measures_on, 1) AS measures_on, 
+                    COALESCE(ms.measures_off, 1) AS measures_off
+             FROM songs s
+             LEFT JOIN song_measure_settings sms ON s.id = sms.song_id
+             LEFT JOIN measure_settings ms ON sms.measure_settings_id = ms.id
+             WHERE s.user_id = $1`,
+            [userId]
+        );
+        
+        
+        return res.status(200).json(result.rows);
+
+    } catch (error) {
+        console.error("Error getting songs:", error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+}
+
 module.exports = {
     createSong,
+    getAllSongs
   };
