@@ -97,8 +97,33 @@ async function deleteSong(req, res) {
     }
 }
 
+async function searchForSong(req, res) {
+    try {
+        const userId = req.userId;
+        const songName = req.body.songName;
+
+        // Search for song
+        const result = await pool.query(
+            `SELECT * FROM songs WHERE user_id = $1 AND name = $2`, 
+            [userId, songName]
+        );
+
+        // Check whether song was found
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "Song not found." });
+        }
+
+        return res.status(200).json(result.rows);
+
+    } catch (error) {
+        console.error("Error searching for song:", error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+}
+
 module.exports = {
     createSong,
     getAllSongs,
-    deleteSong
+    deleteSong,
+    searchForSong
   };
