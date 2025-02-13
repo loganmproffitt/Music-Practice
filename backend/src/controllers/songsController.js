@@ -1,6 +1,4 @@
 const pool = require('../db.js');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 async function createSong(req, res) {
     try {
@@ -75,7 +73,32 @@ async function getAllSongs(req, res) {
     }
 }
 
+async function deleteSong(req, res) {
+    try {
+        const userId = req.userId;
+        const songId = req.params.songId;
+
+        // Delete song
+        const result = await pool.query(
+            `DELETE FROM songs WHERE id = $1 AND user_id = $2 RETURNING *`,
+            [songId, userId]
+        );
+
+        // Check whether the song was found
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "Song not found." });
+        }
+
+        console.log(`Song with id ${songId} successfully deleted.`);
+        return res.status(204).send();
+    } catch (error) {
+        console.error("Error deleting song:", error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+}
+
 module.exports = {
     createSong,
-    getAllSongs
+    getAllSongs,
+    deleteSong
   };
