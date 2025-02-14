@@ -1,7 +1,7 @@
 import "../styles/App.css";
 import "../styles/MetronomeControls.css";
-import { useMetronome } from "../context/MetronomeContext";
-import { useMetronomeScheduler } from "../hooks/useMetronomeScheduler";
+import { useMetronome } from "../context/MetronomeContext.jsx";
+import { useMetronomeScheduler } from "../hooks/useMetronomeScheduler.js";
 import { Play, Pause } from "lucide-react";
 import Visualization from "./Visualization.jsx";
 
