@@ -24,7 +24,7 @@ async function createSong(req, res) {
     }
 }
 
-async function getAllSongs(req, res) {
+async function retrieveSongs(req, res) {
     try {
         // Get userId
         const userId = req.userId;
@@ -112,7 +112,7 @@ async function editSong(req, res) {
             return res.status(400).json({ message: "Song not found." });
         };
 
-        console.log(`Song with id ${userId} edited.`);
+        console.log(`Song with id ${songId} edited.`);
         return res.status(201).json({ message: "Song successfully edited." });
     } catch(error) {
         console.error("Error editing song:", error);
@@ -122,7 +122,7 @@ async function editSong(req, res) {
 
 module.exports = {
     createSong,
-    getAllSongs,
+    retrieveSongs,
     deleteSong,
     searchForSong,
     editSong

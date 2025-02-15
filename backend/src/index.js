@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const songRoutes = require('./routes/songs');
+const setlistRoutes = require('./routes/setlists');
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use('/auth', authRoutes);
 app.use('/songs', songRoutes);
+app.use('/setlists', setlistRoutes);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
