@@ -162,6 +162,28 @@ async function retrieveSetlistSongs(req, res) {
     }
 }
 
+async function removeSong(req, res) {
+    try {
+        const setlistId = req.params.id;
+        const songId = req.params.songId;
+
+        const result = await pool.query(
+            `DELETE FROM setlist_song WHERE setlist_id = $1 AND song_id = $2 RETURNING *`,
+            [setlistId, songId]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "Song not found." });
+        }
+
+        console.log(`Song  with id ${setlistId} deleted.`);
+        return res.status(204).send();
+
+    } catch (error) {
+        console.error("Error removing song:", error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+}
+
 module.exports = {
     createSetlist,
     retrieveSetlists,
@@ -170,5 +192,6 @@ module.exports = {
     editSetlist,
 
     addSong,
-    retrieveSetlistSongs
+    retrieveSetlistSongs,
+    removeSong
 };

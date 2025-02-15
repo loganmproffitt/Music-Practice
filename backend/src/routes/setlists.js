@@ -13,5 +13,6 @@ router.put('/:id', authenticateToken, setlistController.editSetlist);
 // Setlist song management
 router.post('/:id/songs', authenticateToken, setlistController.addSong);
 router.get('/:id/', authenticateToken, setlistController.retrieveSetlistSongs);
+router.delete('/:id/songs/:songId', authenticateToken, setlistController.removeSong);
 
 module.exports = router;
