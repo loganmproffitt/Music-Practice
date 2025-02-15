@@ -30,11 +30,14 @@ CREATE TABLE setlists (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL,
+    description VARCHAR(250),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE setlist_song (
     setlist_id INT REFERENCES setlists(id) ON DELETE CASCADE,
     song_id INT REFERENCES songs(id) ON DELETE CASCADE,
+    position INT NOT NULL,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (setlist_id, song_id)
 );

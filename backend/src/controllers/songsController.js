@@ -24,7 +24,7 @@ async function createSong(req, res) {
     }
 }
 
-async function getAllSongs(req, res) {
+async function retrieveSongs(req, res) {
     try {
         // Get userId
         const userId = req.userId;
@@ -122,7 +122,7 @@ async function editSong(req, res) {
 
 module.exports = {
     createSong,
-    getAllSongs,
+    retrieveSongs,
     deleteSong,
     searchForSong,
     editSong
