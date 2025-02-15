@@ -21,19 +21,9 @@ CREATE TABLE songs (
     denominator INT NOT NULL,
     beat_mask INT[],
     skipping_enabled BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE measure_settings (
-    id SERIAL PRIMARY KEY,
     measures_on INT DEFAULT 1,
-    measures_off INT DEFAULT 1
-);
-
-CREATE TABLE song_measure_settings (
-    song_id INT REFERENCES songs(id) ON DELETE CASCADE,
-    measure_settings_id INT REFERENCES measure_settings(id) ON DELETE CASCADE,
-    PRIMARY KEY (song_id, measure_settings_id)
+    measures_off INT DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE setlists (
