@@ -112,7 +112,7 @@ async function editSong(req, res) {
             return res.status(400).json({ message: "Song not found." });
         };
 
-        console.log(`Song with id ${userId} edited.`);
+        console.log(`Song with id ${songId} edited.`);
         return res.status(201).json({ message: "Song successfully edited." });
     } catch(error) {
         console.error("Error editing song:", error);
