@@ -60,8 +60,33 @@ async function deleteSetlist(req, res) {
     }
 }
 
+async function searchForSetlist(req, res) {
+    try {
+        const userId = req.userId;
+        const searchTerm = req.body.search_term;
+
+        // Search for song
+        const result = await pool.query(
+            `SELECT * FROM setlists WHERE user_id = $1 AND (name ILIKE '%' || $2 || '%' OR description ILIKE '%' || $2 || '%')`, 
+            [userId, searchTerm]
+        );
+
+        // Check whether song was found
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "Setlist not found." });
+        }
+
+        return res.status(200).json(result.rows);
+
+    } catch (error) {
+        console.error("Error searching for setlist:", error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+}
+
 module.exports = {
     createSetlist,
     retrieveSetlists,
-    deleteSetlist
+    deleteSetlist,
+    searchForSetlist
 };
