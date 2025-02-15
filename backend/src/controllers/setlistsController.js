@@ -167,15 +167,32 @@ async function removeSong(req, res) {
         const setlistId = req.params.id;
         const songId = req.params.songId;
 
-        const result = await pool.query(
-            `DELETE FROM setlist_song WHERE setlist_id = $1 AND song_id = $2 RETURNING *`,
+        // Get position
+        const positionResult = await pool.query(
+            `SELECT position FROM setlist_song WHERE setlist_id = $1 AND song_id = $2`,
             [setlistId, songId]
         );
-        if (result.rows.length === 0) {
-            return res.status(404).json({ message: "Song not found." });
+        // Check that song was found
+        if (positionResult.rows.length === 0) {
+            return res.status(404).json({ message: "Song not found in setlist." });
         }
+        const removedPosition = positionResult.rows[0].position;
 
-        console.log(`Song  with id ${setlistId} deleted.`);
+        // Remove song
+        await pool.query(
+            `DELETE FROM setlist_song WHERE setlist_id = $1 AND song_id = $2`,
+            [setlistId, songId]
+        );
+
+        // Update other positions
+        await pool.query(
+            `UPDATE setlist_song
+            SET position = position - 1
+            WHERE setlist_id = $1 AND position > $2`,
+            [setlistId, removedPosition]
+        );
+
+        console.log(`Song with id ${songId} deleted.`);
         return res.status(204).send();
 
     } catch (error) {
