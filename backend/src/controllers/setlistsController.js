@@ -1,5 +1,6 @@
 const pool = require('../db.js');
 const getNextPosition = require('../helpers/getNextPosition.js');
+const getSetlistSongCount = require('../helpers/getSetlistSongCount.js');
 
 async function createSetlist(req, res) {
     try {
@@ -119,6 +120,14 @@ async function addSong(req, res) {
         const { songId } = req.body;
         const nextPosition = await getNextPosition(setlistId);
 
+        const songResult = await pool.query(
+            `SELECT * FROM songs WHERE id = $1`,
+            [songId]
+        );
+        if (songResult.rows.length === 0) {
+            return res.status(404).json({ message: "Song not found." });
+        }
+
         await pool.query(
             `INSERT INTO setlist_song (setlist_id, song_id, position) VALUES ($1, $2, $3)`,
             [setlistId, songId, nextPosition]
@@ -201,6 +210,73 @@ async function removeSong(req, res) {
     }
 }
 
+async function moveSong(req, res) {
+    try {
+        const setlistId = req.params.id;
+        const songId = req.params.songId;
+        const { newPosition } = req.body;
+
+        // Get position
+        const positionResult = await pool.query(
+            `SELECT position FROM setlist_song WHERE setlist_id = $1 AND song_id = $2`,
+            [setlistId, songId]
+        );
+        // Check that song was found
+        if (positionResult.rows.length === 0) {
+            return res.status(404).json({ message: "Song not found in setlist." });
+        }
+        const currentPosition = positionResult.rows[0].position;
+
+        // Check for valid position
+        const songCount = await getSetlistSongCount(setlistId);
+        if (newPosition < 1 || newPosition > songCount) {
+            return res.status(400).json({ message: `Invalid position. Must be between 1 and ${songCount}.` });
+        }
+
+        // Check if position changed
+        if (currentPosition === newPosition) {
+            return res.status(200).json({ message: "No change in position." });
+        }
+
+        await pool.query("BEGIN");
+
+        // Update other positions
+        if (currentPosition > newPosition) {
+            // Song shifted up in list, increment between positions
+            await pool.query(
+                `UPDATE setlist_song
+                SET position = position + 1
+                WHERE setlist_id = $1 AND position < $2 AND position >= $3`,
+                [setlistId, currentPosition, newPosition]
+            );
+        } else {
+            // Song shifted down in list, decrement songs between positions
+            await pool.query(
+                `UPDATE setlist_song
+                SET position = position - 1
+                WHERE setlist_id = $1 AND position > $2 AND position <= $3`,
+                [setlistId, currentPosition, newPosition]
+            );
+        }
+
+        // Update selected song position
+        await pool.query(
+            `UPDATE setlist_song
+            SET position = $1
+            WHERE setlist_id = $2 AND song_id = $3`,
+            [newPosition, setlistId, songId]
+        );
+
+        // Commit changes
+        await pool.query("COMMIT");
+        return res.status(200).json({ message: "Song moved successfully." })
+
+    } catch (error) {
+        console.error("Error removing song:", error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+}
+
 module.exports = {
     createSetlist,
     retrieveSetlists,
@@ -210,5 +286,6 @@ module.exports = {
 
     addSong,
     retrieveSetlistSongs,
-    removeSong
+    removeSong,
+    moveSong
 };
